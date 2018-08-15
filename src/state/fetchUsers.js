@@ -10,6 +10,16 @@ export const setUsersAction = data => ({
     data
 })
 
+export const fetchUsersAction = () => (dispatch, getState) => {
+    dispatch(usersStartedLoadingAction())
+    fetch('https://randomuser.me/api?results=10')
+        .then(response => response.json())
+        .then(data => {
+            dispatch(setUsersAction(data))
+            dispatch(usersStoppedLoadingAction())
+        })
+}
+
 const initialState = {
     users: null,
     isUsersAreLoading: false
@@ -30,7 +40,7 @@ export default (state = initialState, action) => {
         case USERS_STOPPED_LOADING:
             return {
                 ...state,
-                isUsersAreLoading: true
+                isUsersAreLoading: false
             }
         default:
             return state
