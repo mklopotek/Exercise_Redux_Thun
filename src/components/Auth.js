@@ -1,6 +1,10 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { onChangeEmailInputAction, onChangePasswordInputAction } from '../state/auth'
+import { 
+    onEmailChangeAction, 
+    onPasswordChangeAction, 
+    onLogInClickAction 
+} from '../state/auth'
 
 const Auth = (props) => {
     return (
@@ -8,15 +12,15 @@ const Auth = (props) => {
             <input
                 placeholder='email'
                 type='email'
-                onChange={props._onChangeEmailInputAction}
+                onChange={props._onEmailChangeAction}
             />
             <input
                 placeholder='password'
                 type='password'
-                onChange={props._onChangePasswordInputAction}
+                onChange={props._onPasswordChangeAction}
             />
             <button
-                onClick={() => null}
+                onClick={() => props._onLogInClick()}
             >
                 Login
             </button>
@@ -26,12 +30,14 @@ const Auth = (props) => {
 
 
 const mapStateToProps = (state) => ({
-
+    // email: state.auth.email,
+    // password: state.auth.password
 })
 
 const mapDispatchToState = (dispatch) => ({
-    _onChangeEmailInputAction: (event) => dispatch(onChangeEmailInputAction(event.target.value)),
-    _onChangePasswordInputAction: (event) => dispatch(onChangePasswordInputAction(event.target.value))
+    _onEmailChangeAction: (event) => dispatch(onEmailChangeAction(event.target.value)),
+    _onPasswordChangeAction: (event) => dispatch(onPasswordChangeAction(event.target.value)),
+    _onLogInClickAction: () => dispatch(onLogInClickAction())
 })
 
 export default connect(mapStateToProps, mapDispatchToState)(Auth)

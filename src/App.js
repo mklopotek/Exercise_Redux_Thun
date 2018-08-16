@@ -6,8 +6,8 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-       <Users />
-       <Auth />
+        {/* <Users /> */}
+        <Auth />
       </div>
     );
   }

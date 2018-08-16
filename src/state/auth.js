@@ -1,32 +1,52 @@
-const INPUT_EMAIL = 'auth/INPUT_EMAIL'
-const INPUT_PASSWORD = 'auth/INPUT_PASSWORD'
+import { authFirebase } from 'firebase'
 
-export const onChangeEmailInputAction = value => ({
-    type: INPUT_EMAIL,
-    logInEmail: value
+const EMAIL_CHANGE = 'auth/EMAIL_CHANGE'
+const PASSWORD_CHANGE = 'auth/PASSWORD_CHANGE'
+const SET_USER = 'auth/LOGIN'
+
+export const onEmailChangeAction = value => ({
+    type: EMAIL_CHANGE,
+    email: value
 })
 
-export const onChangePasswordInputAction = value => ({
-    type: INPUT_PASSWORD,
-    logInPassword: value
+export const onPasswordChangeAction = value => ({
+    type: PASSWORD_CHANGE,
+    password: value
 })
+
+export const onLogInClickAction = () => (dispatch, getState) => {
+    const { auth } = getState()
+    
+    authFirebase.signInWithEmailAndPassword(auth.email, auth.password)
+    .catch(function (error) {
+        console.log(error)
+        // Handle Errors here.
+        const errorCode = error.code;
+        const errorMessage = error.message;
+
+        alert(errorMessage)
+
+    })
+
+}
 
 const initialState = {
-    logInEmail: null,
-    logInPassword: null,
+    email: null,
+    password: null,
+    user: null
 } 
 
 export default (state=initialState, action) => {
     switch(action.type){
-        case INPUT_EMAIL:
+        case EMAIL_CHANGE:
         return {
             ...state,
-            logInEmail: action.logInEmail
+            email: action.email
         }
-        case INPUT_PASSWORD:
+        case PASSWORD_CHANGE:
         return {
             ...state,
-            logInPassword: action.logInPassword
+            password: action.password
         }
         default: 
         return state

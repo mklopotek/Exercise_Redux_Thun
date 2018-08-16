@@ -6,14 +6,11 @@ const Users = (props) => (
 
     <div>
         {
-            props._isUsersAreLoading ?
-                'loading'
-                :
-                props._users.results.map(e => {
-                    return (<div key={e.login.uuid}><div>{e.name.first}</div>
-                        <img src={e.picture.medium} alt=''/>
-                    </div>)
-                })
+            props._users && props._users.results.map(e => {
+                return (<div key={e.login.uuid}><div>{e.name.first}</div>
+                    <img src={e.picture.medium} alt='' />
+                </div>)
+            })
         }
     </div>
 
