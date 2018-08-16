@@ -6,32 +6,27 @@ import {
     onLogInClickAction 
 } from '../state/auth'
 
+import LogInByEmailAndPassword from './LogInByEmailAndPassword'
+
+
 const Auth = (props) => {
     return (
         <div>
-            <input
-                placeholder='email'
-                type='email'
-                onChange={props._onEmailChangeAction}
+            <LogInByEmailAndPassword 
+            onLogInClickAction={props._onLogInClickAction}
+            onPasswordChangeAction={props._onPasswordChangeAction}
+            onEmailChangeAction={props._onEmailChangeAction}
+            passwordValue={props._passwordValue}
+            emailValue={props._emailValue}
             />
-            <input
-                placeholder='password'
-                type='password'
-                onChange={props._onPasswordChangeAction}
-            />
-            <button
-                onClick={() => props._onLogInClick()}
-            >
-                Login
-            </button>
         </div>
     )
 }
 
 
 const mapStateToProps = (state) => ({
-    // email: state.auth.email,
-    // password: state.auth.password
+    _emailValue: state.auth.email,
+    _passwordValue: state.auth.password
 })
 
 const mapDispatchToState = (dispatch) => ({

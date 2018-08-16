@@ -1,4 +1,4 @@
-import { authFirebase } from 'firebase'
+import { auth as firebaseAuth } from '../firebaseConfig'
 
 const EMAIL_CHANGE = 'auth/EMAIL_CHANGE'
 const PASSWORD_CHANGE = 'auth/PASSWORD_CHANGE'
@@ -14,42 +14,63 @@ export const onPasswordChangeAction = value => ({
     password: value
 })
 
-export const onLogInClickAction = () => (dispatch, getState) => {
-    const { auth } = getState()
-    
-    authFirebase.signInWithEmailAndPassword(auth.email, auth.password)
-    .catch(function (error) {
-        console.log(error)
-        // Handle Errors here.
-        const errorCode = error.code;
-        const errorMessage = error.message;
+export const setUserAction = user => ({
+    type: SET_USER,
+    user
+})
 
-        alert(errorMessage)
+export const initAuthStateListening = () => (dispatch, getState) => {
+    firebaseAuth.onAuthStateChanged(user => {
+        if (user) {
+            //here is good place to pu dispatchers func. ?!
+        } else {
 
+        }
+
+        dispatch(setUserAction(user)) //user is null if user is logged out and user in state will be null so everything will be as initial :)
     })
+}
+
+//jeśli użytkownik jest zalogowany to w onAuthStateChanged dostaje user'a
+
+export const onLogInClickAction = () => (dispatch, getState) => {
+    console.dir(firebaseAuth)
+    const { auth } = getState()
+
+    firebaseAuth.signInWithEmailAndPassword(auth.email, auth.password)
+        .then(() => console.log('LoginOk'))
+        .catch(function (error) {
+            const errorMessage = error.message;
+            alert(errorMessage)
+        })
 
 }
 
 const initialState = {
-    email: null,
-    password: null,
+    email: '',
+    password: '',
     user: null
-} 
+}
 
-export default (state=initialState, action) => {
-    switch(action.type){
+export default (state = initialState, action) => {
+    switch (action.type) {
         case EMAIL_CHANGE:
-        return {
-            ...state,
-            email: action.email
-        }
+            return {
+                ...state,
+                email: action.email
+            }
         case PASSWORD_CHANGE:
-        return {
-            ...state,
-            password: action.password
-        }
-        default: 
-        return state
+            return {
+                ...state,
+                password: action.password
+            }
+        case SET_USER:
+            return {
+                ...state,
+                user: action.user
+            }
+        default:
+            return state
     }
 }
 
