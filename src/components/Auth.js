@@ -3,7 +3,8 @@ import { connect } from 'react-redux'
 import {
     onEmailChangeAction,
     onPasswordChangeAction,
-    onLogInClickAction
+    onLogInClickAction,
+    logOutAction
 } from '../state/auth'
 
 import LogInByEmailAndPassword from './LogInByEmailAndPassword'
@@ -11,8 +12,13 @@ import LogInByEmailAndPassword from './LogInByEmailAndPassword'
 
 const Auth = (props) => (
 
-    props._user ?
-        props.children
+    props._user ? 
+    <div>
+        <button
+        onClick={props._logOutAction}
+        >LogOut</button>
+        {props.children}
+    </div>
         :
         <div>
             <LogInByEmailAndPassword
@@ -35,7 +41,8 @@ const mapStateToProps = (state) => ({
 const mapDispatchToState = (dispatch) => ({
     _onEmailChangeAction: (event) => dispatch(onEmailChangeAction(event.target.value)),
     _onPasswordChangeAction: (event) => dispatch(onPasswordChangeAction(event.target.value)),
-    _onLogInClickAction: () => dispatch(onLogInClickAction())
+    _onLogInClickAction: () => dispatch(onLogInClickAction()),
+    _logOutAction: () => dispatch(logOutAction())
 })
 
 export default connect(mapStateToProps, mapDispatchToState)(Auth)

@@ -1,4 +1,5 @@
 import { auth as firebaseAuth } from '../firebaseConfig'
+import { fetchUsersAction } from '../state/fetchUsers'
 
 const EMAIL_CHANGE = 'auth/EMAIL_CHANGE'
 const PASSWORD_CHANGE = 'auth/PASSWORD_CHANGE'
@@ -21,17 +22,26 @@ export const setUserAction = user => ({
 
 export const initAuthStateListening = () => (dispatch, getState) => {
     firebaseAuth.onAuthStateChanged(user => {
+
+        dispatch(setUserAction(user)) //user is null if user is logged out and user in state will be null so everything will be as initial :)
+
         if (user) {
+            return dispatch(fetchUsersAction())
             //here is good place to pu dispatchers func. ?!
         } else {
 
         }
-
-        dispatch(setUserAction(user)) //user is null if user is logged out and user in state will be null so everything will be as initial :)
     })
+    //jeśli użytkownik jest zalogowany to w onAuthStateChanged dostaje user'a
 }
 
-//jeśli użytkownik jest zalogowany to w onAuthStateChanged dostaje user'a
+
+export const logOutAction = () => (dispatch, getState) => {
+    firebaseAuth.signOut()
+        .then(() => console.log('Signout'))
+        .catch(() => console.log('Signout error'))
+}
+
 
 export const onLogInClickAction = () => (dispatch, getState) => {
     console.dir(firebaseAuth)
@@ -43,7 +53,6 @@ export const onLogInClickAction = () => (dispatch, getState) => {
             const errorMessage = error.message;
             alert(errorMessage)
         })
-
 }
 
 const initialState = {
