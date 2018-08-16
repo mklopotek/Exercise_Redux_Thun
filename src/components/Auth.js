@@ -1,32 +1,35 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { 
-    onEmailChangeAction, 
-    onPasswordChangeAction, 
-    onLogInClickAction 
+import {
+    onEmailChangeAction,
+    onPasswordChangeAction,
+    onLogInClickAction
 } from '../state/auth'
 
 import LogInByEmailAndPassword from './LogInByEmailAndPassword'
 
 
-const Auth = (props) => {
-    return (
+const Auth = (props) => (
+
+    props._user ?
+        props.children
+        :
         <div>
-            <LogInByEmailAndPassword 
-            onLogInClickAction={props._onLogInClickAction}
-            onPasswordChangeAction={props._onPasswordChangeAction}
-            onEmailChangeAction={props._onEmailChangeAction}
-            passwordValue={props._passwordValue}
-            emailValue={props._emailValue}
+            <LogInByEmailAndPassword
+                onLogInClickAction={props._onLogInClickAction}
+                onPasswordChangeAction={props._onPasswordChangeAction}
+                onEmailChangeAction={props._onEmailChangeAction}
+                passwordValue={props._passwordValue}
+                emailValue={props._emailValue}
             />
         </div>
-    )
-}
+)
 
 
 const mapStateToProps = (state) => ({
     _emailValue: state.auth.email,
-    _passwordValue: state.auth.password
+    _passwordValue: state.auth.password,
+    _user: state.auth.user
 })
 
 const mapDispatchToState = (dispatch) => ({
